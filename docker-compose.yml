@@ -11,13 +11,13 @@ services:
     volumes:
       - postgres_db:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=${DATABASE__DB}
-      - POSTGRES_USER=${DATABASE__USERNAME}
-      - POSTGRES_PASSWORD=${DATABASE__PASSWORD}
+      - POSTGRES_DB=${DB_SETTINGS__DB}
+      - POSTGRES_USER=${DB_SETTINGS__USERNAME}
+      - POSTGRES_PASSWORD=${DB_SETTINGS__PASSWORD}
     env_file:
-      - .env
+      - .env.example
     ports:
-      - "${DATABASE__PORT}:5432"
+      - "${DB_SETTINGS__PORT}:5432"
 
 volumes:
   postgres_db:

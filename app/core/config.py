@@ -44,22 +44,22 @@ class Database(BaseModel):
 
 class Settings(BaseSettings):
     security: Security
-    database: Database
+    db_settings: Database
 
     @computed_field  # type: ignore[misc]
     @property
     def sqlalchemy_database_uri(self) -> URL:
         return URL.create(
             drivername="postgresql+asyncpg",
-            username=self.database.username,
-            password=self.database.password.get_secret_value(),
-            host=self.database.hostname,
-            port=self.database.port,
-            database=self.database.db,
+            username=self.db_settings.username,
+            password=self.db_settings.password.get_secret_value(),
+            host=self.db_settings.hostname,
+            port=self.db_settings.port,
+            database=self.db_settings.db,
         )
 
     model_config = SettingsConfigDict(
-        env_file=f"{PROJECT_DIR}/.env",
+        env_file=f"{PROJECT_DIR}/.env.example",
         case_sensitive=False,
         env_nested_delimiter="__",
     )
