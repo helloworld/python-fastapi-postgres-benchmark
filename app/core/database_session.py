@@ -18,6 +18,7 @@ from app.core.config import get_settings
 
 
 def new_async_engine(uri: URL) -> AsyncEngine:
+    print(uri)
     return create_async_engine(
         uri,
         pool_pre_ping=True,
