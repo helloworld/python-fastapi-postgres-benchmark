@@ -67,6 +67,4 @@ class Settings(BaseSettings):
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
-    s = Settings()  # type: ignore
-    print(s.database.hostname, s.database.port, s.database.db, sep="\n")
-    return s
+    return Settings()  # type: ignore
