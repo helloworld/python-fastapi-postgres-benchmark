@@ -1,11 +1,12 @@
-import asyncio
 import os
-from collections.abc import AsyncGenerator, Generator
+from collections.abc import AsyncGenerator
 
 import pytest
 import pytest_asyncio
 import sqlalchemy
 from httpx import ASGITransport, AsyncClient
+from pytest import Item
+from pytest_asyncio import is_async_test
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     async_sessionmaker,
@@ -24,15 +25,18 @@ default_user_password = "geralt"
 default_user_access_token = create_jwt_token(default_user_id).access_token
 
 
-@pytest.fixture(scope="session")
-def event_loop() -> Generator[asyncio.AbstractEventLoop, None, None]:
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    yield loop
-    loop.close()
+def pytest_collection_modifyitems(items: list[Item]) -> None:
+    """Ensure all tests run in a session scoped event loop
+
+    See Also: https://pytest-asyncio.readthedocs.io/en/latest/how-to-guides/run_session_tests_in_same_loop.html
+    """
+    pytest_asyncio_tests = (item for item in items if is_async_test(item))
+    session_scope_marker = pytest.mark.asyncio(loop_scope="session")
+    for async_test in pytest_asyncio_tests:
+        async_test.add_marker(session_scope_marker, append=False)
 
 
-@pytest_asyncio.fixture(scope="session", autouse=True)
+@pytest_asyncio.fixture(loop_scope="session", autouse=True)
 async def fixture_setup_new_test_database() -> None:
     worker_name = os.getenv("PYTEST_XDIST_WORKER", "gw0")
     test_db_name = f"test_db_{worker_name}"
