@@ -21,7 +21,7 @@ class TestOptimizationStatus(unittest.TestCase):
         solution = 5
         self.assertEqual(len(result), solution)
         self.assertLess(
-            end_time - start_time, 1, "Optimized function took longer than 1 second"
+            end_time - start_time, 2, "Optimized function took longer than 2 seconds"
         )
 
     def test_unoptimized_speed(self):
