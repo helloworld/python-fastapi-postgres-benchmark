@@ -1,10 +1,42 @@
 import os
 import subprocess
 import pytest
+import time
+import shutil
+from pathlib import Path
 
 # Path to the log file (as per spec)
 LOG_FILE = os.path.expanduser("~/.cmd_logger_history.txt")
+SHELL = os.environ.get("SHELL", "/bin/bash")
+SHELL_NAME = os.path.basename(SHELL)
 
+
+def get_shell_config_file():
+    """Get the appropriate shell config file path"""
+    home = str(Path.home())
+    if SHELL_NAME == "bash":
+        return os.path.join(home, ".bashrc")
+    elif SHELL_NAME == "zsh":
+        return os.path.join(home, ".zshrc")
+    else:
+        pytest.skip(f"Unsupported shell: {SHELL_NAME}")
+
+@pytest.fixture
+def shell_session():
+    """Create an interactive shell session for testing"""
+    config_file = get_shell_config_file()
+    
+    # Create a temporary shell session
+    process = subprocess.Popen(
+        [SHELL],
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        env={**os.environ, "HISTFILE": "./.test_history"}
+    )
+    yield process
+    process.terminate()
 
 @pytest.fixture
 def cleanup_log_file():
@@ -27,7 +59,7 @@ def stop_cmd_log():
 
 
 @pytest.fixture
-def setup_env(cleanup_log_file, stop_cmd_log):
+def setup_env(cleanup_log_file, stop_cmd_log, shell_session):
     """Combines cleanup and stopping logging for a clean slate."""
     pass
 
@@ -38,6 +70,12 @@ def run_cmd(args):
         args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
     )
 
+
+def run_shell_command(shell_session, command):
+    """Run a command in the test shell session"""
+    shell_session.stdin.write(f"{command}\n")
+    shell_session.stdin.flush()
+    time.sleep(0.1)  # Give the shell time to process
 
 def test_help_command(setup_env):
     """Test that the --help and -h commands print usage information."""
@@ -90,32 +128,44 @@ def test_status_logging_inactive(setup_env):
     assert "Logging is inactive" in result.stdout
 
 
-def test_logging_commands_to_file(setup_env):
+def test_logging_commands_to_file(setup_env, shell_session):
     """Test that executed commands are logged when logging is active."""
-    run_cmd(["cmd-logger", "start", "cmd-log"])
-    # Simulate a command
-    subprocess.run(["echo", "Hello, world!"])
-    subprocess.run(["ls"])
+    # Start logging
+    subprocess.run(["cmd-logger", "start", "cmd-log"])
+    time.sleep(0.1)  # Wait for logger to initialize
 
+    # Run some test commands in the shell
+    test_commands = [
+        "echo 'Hello, world!'",
+        "pwd",
+        "ls -l"
+    ]
+    
+    for cmd in test_commands:
+        run_shell_command(shell_session, cmd)
+    
     # Stop logging
-    run_cmd(["cmd-logger", "stop", "cmd-log"])
+    subprocess.run(["cmd-logger", "stop", "cmd-log"])
 
-    # Verify that the command was logged
+    # Verify commands were logged
     assert os.path.exists(LOG_FILE)
     with open(LOG_FILE, "r") as f:
         log_contents = f.read()
-    assert "echo Hello, world!" in log_contents
-    assert "ls" in log_contents
+        
+    for cmd in test_commands:
+        assert cmd in log_contents
 
 
-def test_logging_does_not_append_when_stopped(setup_env):
+def test_logging_does_not_append_when_stopped(setup_env, shell_session):
     """Test that no new commands are logged when logging is stopped."""
-    run_cmd(["cmd-logger", "start", "cmd-log"])
-    subprocess.run(["echo", "Logged Command"])
-    run_cmd(["cmd-logger", "stop", "cmd-log"])
-    subprocess.run(["echo", "Unlogged Command"])
+    # Start logging and run a command
+    subprocess.run(["cmd-logger", "start", "cmd-log"])
+    run_shell_command(shell_session, "echo 'Logged Command'")
+    
+    # Stop logging and run another command
+    subprocess.run(["cmd-logger", "stop", "cmd-log"])
+    run_shell_command(shell_session, "echo 'Unlogged Command'")
 
-    # Verify only the first command was logged
     with open(LOG_FILE, "r") as f:
         log_contents = f.read()
     assert "Logged Command" in log_contents
