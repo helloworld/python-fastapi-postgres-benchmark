@@ -18,6 +18,6 @@ Response:
 ```
 
 ## Implementation Steps
-In app/api/main.py, implement a HELLO WORLD /hello-world endpoint. I have included a test for this in app/tests/test_users/test_delete_current_user.py. Make sure it passes.
+In app/api/main.py, implement a HELLO WORLD /hello-world endpoint. I have included a test for this in app/tests/test_hello.py. make sure that test passes.
 
 
