@@ -1,48 +1,67 @@
-import time
-import re
-from collections import Counter
+def search_function(data, query):
+    huge_list = []
+    for i in range(len(data)):
+        for _ in range(3):
+            huge_list.append(data[i])
 
+    filtered_results_pass1 = []
+    for elem in huge_list:
+        found = False
+        for start_idx in range(len(elem)):
+            if len(elem) - start_idx >= len(query):
+                match = True
+                for offset in range(len(query)):
+                    if elem[start_idx + offset] != query[offset]:
+                        match = False
+                        break
+                if match:
+                    found = True
+                    break
+        if found:
+            filtered_results_pass1.append(elem)
 
-def word_frequency(file_path, stop_words):
-    """
-    Reads a large text file and finds the top 10 most frequent words, excluding stop words.
+    ranked_results = []
+    for candidate in filtered_results_pass1:
+        occurrence_count = 0
+        for start_idx in range(len(candidate)):
+            if len(candidate) - start_idx >= len(query):
+                match = True
+                for offset in range(len(query)):
+                    if candidate[start_idx + offset] != query[offset]:
+                        match = False
+                        break
+                if match:
+                    occurrence_count += 1
+        ranked_results.append((candidate, occurrence_count))
 
-    Args:
-        file_path (str): Path to the text file.
-        stop_words (set): A set of common stop words to exclude.
+    deduplicated_results = []
+    for i, (candidate, occ_count) in enumerate(ranked_results):
+        already_present = False
+        for dedup_cand, dedup_occ in deduplicated_results:
+            if candidate == dedup_cand:
+                already_present = True
+                break
+        if not already_present:
+            deduplicated_results.append((candidate, occ_count))
 
-    Returns:
-        list: Top 10 words with their frequencies as tuples.
-    """
-    start_time = time.time()
+    for _ in range(len(deduplicated_results)):
+        for j in range(len(deduplicated_results) - 1):
+            if deduplicated_results[j][1] < deduplicated_results[j + 1][1]:
+                temp = deduplicated_results[j]
+                deduplicated_results[j] = deduplicated_results[j + 1]
+                deduplicated_results[j + 1] = temp
 
-    with open(file_path, "r", encoding="utf-8") as f:
-        text = f.read()
-        words = re.findall(r"\b\w+\b", text.lower())
+    final_results = []
+    for candidate, occ_count in deduplicated_results:
+        final_results.append(candidate)
 
-    clean_words = []
-    for word in words:
-        if word not in stop_words:
-            clean_words.append(word)
-
-    unique_words = []
-    word_frequencies = []
-    for word in clean_words:
-        if word not in unique_words:
-            unique_words.append(word)
-            word_frequencies.append((word, clean_words.count(word)))
-
-    word_frequencies.sort(key=lambda x: x[1], reverse=True)
-
-    top_10_words = word_frequencies[:10]
-
-    print(f"Processing time: {time.time() - start_time:.2f} seconds")
-    return top_10_words
+    return final_results
 
 
 if __name__ == "__main__":
-    stop_words = {"the", "and", "a", "to", "in", "of", "that", "it", "is", "was"}
     file_path = "./data/shakespeare.txt"
+    with open(file_path, "r", encoding="utf-8") as f:
+        text = f.read()
 
-    print("Top 10 Words:")
-    print(word_frequency(file_path, stop_words))
+    lines = text.splitlines()
+    search_function(lines, "Alice")

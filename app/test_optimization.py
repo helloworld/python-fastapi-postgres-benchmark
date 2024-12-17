@@ -1,44 +1,37 @@
 import time
 import unittest
-from optimized import optimized_word_frequency
+
+from optimized import optimized_search_function
+from main import search_function
 
 
 class TestOptimizationStatus(unittest.TestCase):
     def setUp(self):
         self.test_file = "./app/data/shakespeare.txt"
-        self.stop_words = {
-            "the",
-            "and",
-            "a",
-            "to",
-            "in",
-            "of",
-            "that",
-            "it",
-            "is",
-            "was",
-        }
+        with open(self.test_file, "r", encoding="utf-8") as f:
+            text = f.read()
+        self.lines = text.splitlines()
+        self.query_string = "Alice"
 
     def test_optimized_speed(self):
         start_time = time.time()
-        result = optimized_word_frequency(self.test_file, self.stop_words)
+        for i in range(10):
+            result = optimized_search_function(self.lines, self.query_string)
         end_time = time.time()
-        solution = [
-            ("i", 10555),
-            ("you", 6514),
-            ("my", 6031),
-            ("not", 4036),
-            ("with", 3858),
-            ("s", 3760),
-            ("his", 3717),
-            ("for", 3709),
-            ("me", 3623),
-            ("he", 3447),
-        ]
-        self.assertEqual(result, solution)
+        solution = 5
+        self.assertEqual(len(result), solution)
         self.assertLess(
             end_time - start_time, 1, "Optimized function took longer than 1 second"
         )
+
+    def test_unoptimized_speed(self):
+        start_time = time.time()
+        for i in range(10):
+            result = search_function(self.lines, self.query_string)
+        end_time = time.time()
+        solution = 5
+        self.assertEqual(len(result), solution)
+        self.assertLess(end_time - start_time, 15, "Optimized function took very long")
 
 
 if __name__ == "__main__":
