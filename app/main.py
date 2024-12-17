@@ -1,43 +1,48 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from fastapi.responses import JSONResponse
-
-from app.api.api_router import api_router, auth_router
-from app.core.config import get_settings
-
-app = FastAPI(
-    title="minimal fastapi postgres template",
-    version="6.0.0",
-    description="https://github.com/rafsaf/minimal-fastapi-postgres-template",
-    openapi_url="/openapi.json",
-    docs_url="/",
-)
-
-app.include_router(auth_router)
-app.include_router(api_router)
+import time
+import re
+from collections import Counter
 
 
-# Health check
-@app.get("/health", response_class=JSONResponse, status_code=200)
-def health_check():
-    return {"status": "ok"}
+def word_frequency(file_path, stop_words):
+    """
+    Reads a large text file and finds the top 10 most frequent words, excluding stop words.
+
+    Args:
+        file_path (str): Path to the text file.
+        stop_words (set): A set of common stop words to exclude.
+
+    Returns:
+        list: Top 10 words with their frequencies as tuples.
+    """
+    start_time = time.time()
+
+    with open(file_path, "r", encoding="utf-8") as f:
+        text = f.read()
+        words = re.findall(r"\b\w+\b", text.lower())
+
+    clean_words = []
+    for word in words:
+        if word not in stop_words:
+            clean_words.append(word)
+
+    unique_words = []
+    word_frequencies = []
+    for word in clean_words:
+        if word not in unique_words:
+            unique_words.append(word)
+            word_frequencies.append((word, clean_words.count(word)))
+
+    word_frequencies.sort(key=lambda x: x[1], reverse=True)
+
+    top_10_words = word_frequencies[:10]
+
+    print(f"Processing time: {time.time() - start_time:.2f} seconds")
+    return top_10_words
 
 
-# Sets all CORS enabled origins
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        str(origin).rstrip("/")
-        for origin in get_settings().security.backend_cors_origins
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+if __name__ == "__main__":
+    stop_words = {"the", "and", "a", "to", "in", "of", "that", "it", "is", "was"}
+    file_path = "./data/shakespeare.txt"
 
-# Guards against HTTP Host Header attacks
-app.add_middleware(
-    TrustedHostMiddleware,
-    allowed_hosts=get_settings().security.allowed_hosts,
-)
+    print("Top 10 Words:")
+    print(word_frequency(file_path, stop_words))
