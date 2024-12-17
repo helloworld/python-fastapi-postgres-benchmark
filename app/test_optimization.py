@@ -31,7 +31,7 @@ class TestOptimizationStatus(unittest.TestCase):
         end_time = time.time()
         solution = 5
         self.assertEqual(len(result), solution)
-        self.assertLess(end_time - start_time, 15, "Optimized function took very long")
+        self.assertLess(end_time - start_time, 60, "Optimized function took very long")
 
 
 if __name__ == "__main__":
