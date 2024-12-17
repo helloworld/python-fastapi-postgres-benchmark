@@ -21,11 +21,12 @@ def get_shell_config_file():
     else:
         pytest.skip(f"Unsupported shell: {SHELL_NAME}")
 
+
 @pytest.fixture
 def shell_session():
     """Create an interactive shell session for testing"""
     config_file = get_shell_config_file()
-    
+
     # Create a temporary shell session
     process = subprocess.Popen(
         [SHELL],
@@ -33,10 +34,11 @@ def shell_session():
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
-        env={**os.environ, "HISTFILE": "./.test_history"}
+        env={**os.environ, "HISTFILE": "./.test_history"},
     )
     yield process
     process.terminate()
+
 
 @pytest.fixture
 def cleanup_log_file():
@@ -76,6 +78,7 @@ def run_shell_command(shell_session, command):
     shell_session.stdin.write(f"{command}\n")
     shell_session.stdin.flush()
     time.sleep(0.1)  # Give the shell time to process
+
 
 def test_help_command(setup_env):
     """Test that the --help and -h commands print usage information."""
@@ -135,15 +138,11 @@ def test_logging_commands_to_file(setup_env, shell_session):
     time.sleep(0.1)  # Wait for logger to initialize
 
     # Run some test commands in the shell
-    test_commands = [
-        "echo 'Hello, world!'",
-        "pwd",
-        "ls -l"
-    ]
-    
+    test_commands = ["echo 'Hello, world!'", "pwd", "ls -l"]
+
     for cmd in test_commands:
         run_shell_command(shell_session, cmd)
-    
+
     # Stop logging
     subprocess.run(["cmd-logger", "stop", "cmd-log"])
 
@@ -151,7 +150,7 @@ def test_logging_commands_to_file(setup_env, shell_session):
     assert os.path.exists(LOG_FILE)
     with open(LOG_FILE, "r") as f:
         log_contents = f.read()
-        
+
     for cmd in test_commands:
         assert cmd in log_contents
 
@@ -161,7 +160,7 @@ def test_logging_does_not_append_when_stopped(setup_env, shell_session):
     # Start logging and run a command
     subprocess.run(["cmd-logger", "start", "cmd-log"])
     run_shell_command(shell_session, "echo 'Logged Command'")
-    
+
     # Stop logging and run another command
     subprocess.run(["cmd-logger", "stop", "cmd-log"])
     run_shell_command(shell_session, "echo 'Unlogged Command'")

@@ -43,3 +43,5 @@ The solution should handle unexpected commands gracefully and should be straight
 CAREFULLY read the provided tests first to understand the precise bounds of this spec. Implement the `cmd-logger` tool so that all these tests pass.
 
 Ensure that after your implementation is complete, all tests in app/tests/test.py are passing.
+
+In the case that a test case is failing, you should spend a some time carefully reasoning about why a test is failing, before you go into writing more code. Consider debugging your own outputs if tests are failing.
