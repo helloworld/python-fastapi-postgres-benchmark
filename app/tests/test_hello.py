@@ -4,7 +4,7 @@ from httpx import AsyncClient
 from app.main import app
 
 
-async def test_health_check_status_code(client: AsyncClient) -> None:
+async def test_hello_world(client: AsyncClient) -> None:
     response = await client.get(
         app.url_path_for("hello_world"),
     )

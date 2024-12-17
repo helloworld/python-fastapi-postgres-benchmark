@@ -23,10 +23,6 @@ app.include_router(api_router)
 def health_check():
     return {"status": "ok"}
 
-
-# TODO: IMPLEMENT TO PASS TEST
-
-
 # Sets all CORS enabled origins
 app.add_middleware(
     CORSMiddleware,
