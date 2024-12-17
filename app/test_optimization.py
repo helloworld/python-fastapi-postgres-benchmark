@@ -5,7 +5,7 @@ from optimized import optimized_word_frequency
 
 class TestOptimizationStatus(unittest.TestCase):
     def setUp(self):
-        self.test_file = "./data/shakespeare.txt"
+        self.test_file = "./app/data/shakespeare.txt"
         self.stop_words = {
             "the",
             "and",
