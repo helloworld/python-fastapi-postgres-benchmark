@@ -10,7 +10,7 @@ Processing time: 0.13 seconds
 [('i', 10555), ('you', 6514), ('my', 6031) ... ('he', 3447)]
 
 ## Implementation Steps
-make a new file called optimized.py which contains optimized code. I wrote a test case verifying this in app/test_optimization.py. make sure that test passes.
+read code in app/main.py to understand the current implementation. then, make a new file called optimized.py which contains optimized code. I wrote a test case verifying this in app/test_optimization.py. make sure that test passes.
 
 
 
