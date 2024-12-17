@@ -7,23 +7,23 @@ You need to implement a CLI tool called `cmd-logger` that can:
 5. Ensure that after your implementation is complete, all tests in app/tests/test.py are passing.
   
 This includes:
-- A `start` command that begins logging new commands to a persistent log file (e.g. `~/.cmd_logger_history.txt`).
-- A `stop` command that halts further logging.
-- A `status` command that shows if logging is currently active.
-- A `--help` command (or `-h`) that prints usage information.
+- A `start cmd-log` command that begins logging new commands to a persistent log file (e.g. `~/.cmd_logger_history.txt`).
+- A `stop cmd-log` command that halts further logging.
+- A `status cmd-log` command that shows if logging is currently active.
+- A `cmd-log --help` command (or `-h`) that prints usage information.
 
 The solution should handle unexpected commands gracefully and should be straightforward for both developers and non-technical team members to run. Tests will be provided to verify that all functionalities work as expected.
 
 # REQUIREMENTS
 1. **CLI Structure:**
    - The CLI must have `start`, `stop`, `status`, and `--help` (or `-h`) commands.
-   - Running `start` should create or open the log file and enable logging.
-   - Running `stop` should disable logging.
-   - Running `status` should print whether logging is active.
-   - Running `--help` or `-h` should print usage information.
+   - Running `start cmd-log` should create or open the log file and enable logging.
+   - Running `stop cmd-log` should disable logging.
+   - Running `status cmd-log` should print whether logging is active.
+   - Running `cmd-log --help` or `-h` should print usage information.
    
 2. **Logging Behavior:**
-   - When `start` is active, any executed terminal command (like `ls`, `pwd`, `echo "Hello"`) should be appended to the log file, one command per line.
+   - When `start cmd-log` is active, any executed terminal command (like `ls`, `pwd`, `echo "Hello"`) should be appended to the log file, one command per line.
    - Stopping logging should prevent any further commands from being recorded.
    - The log file (`~/.cmd_logger_history.txt`) should not be overwritten when restarting logging. It should continue appending commands at the end.
    
@@ -40,6 +40,6 @@ The solution should handle unexpected commands gracefully and should be straight
    - Include a README or instructions in the code repository.
 
 # IMPLEMENTATION
-Carefully read the provided tests (test cases and pseudo-code examples). Implement the `cmd-logger` tool so that all these tests pass.
+CAREFULLY read the provided tests first to understand the precise bounds of this spec. Implement the `cmd-logger` tool so that all these tests pass.
 
 Ensure that after your implementation is complete, all tests in app/tests/test.py are passing.

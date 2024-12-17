@@ -1,20 +1,14 @@
 import os
 import subprocess
 import pytest
-import time
 
-# Log file location (expected)
+# Path to the log file (as per spec)
 LOG_FILE = os.path.expanduser("~/.cmd_logger_history.txt")
-
-# CLI Command
-CMD_LOGGER_CMD = "python cmd_logger.py"
 
 
 @pytest.fixture
-def clean_log_file():
-    """
-    Fixture to ensure the log file starts clean for each test.
-    """
+def cleanup_log_file():
+    """Fixture to clean up the log file before and after tests."""
     if os.path.exists(LOG_FILE):
         os.remove(LOG_FILE)
     yield
@@ -22,145 +16,137 @@ def clean_log_file():
         os.remove(LOG_FILE)
 
 
-def run_command(cmd):
-    """
-    Helper to run a shell command and return its output, error, and exit code.
-    """
-    proc = subprocess.Popen(
-        cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True
+@pytest.fixture
+def stop_cmd_log():
+    """Ensures logging is stopped before tests start."""
+    subprocess.run(
+        ["cmd-logger", "stop", "cmd-log"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
     )
-    out, err = proc.communicate()
-    return out.decode("utf-8").strip(), err.decode("utf-8").strip(), proc.returncode
 
 
-def test_help_documentation(clean_log_file):
-    """
-    Test that --help works correctly.
-    """
-    out, err, code = run_command(f"{CMD_LOGGER_CMD} --help")
-    assert code == 0
-    assert "Usage:" in out
-    assert "start" in out
-    assert "stop" in out
-    assert "status" in out
+@pytest.fixture
+def setup_env(cleanup_log_file, stop_cmd_log):
+    """Combines cleanup and stopping logging for a clean slate."""
+    pass
 
 
-def test_start_creates_log_file(clean_log_file):
-    """
-    Test that 'start' creates the log file.
-    """
-    out, err, code = run_command(f"{CMD_LOGGER_CMD} start")
-    assert code == 0
-    assert "Logging started" in out
+def run_cmd(args):
+    """Utility to run a command and capture its output."""
+    return subprocess.run(
+        args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+    )
+
+
+def test_help_command(setup_env):
+    """Test that the --help and -h commands print usage information."""
+    result = run_cmd(["cmd-logger", "--help"])
+    assert result.returncode == 0
+    assert "start" in result.stdout
+    assert "stop" in result.stdout
+    assert "status" in result.stdout
+
+    result = run_cmd(["cmd-logger", "-h"])
+    assert result.returncode == 0
+    assert "start" in result.stdout
+
+
+def test_invalid_command(setup_env):
+    """Test that invalid subcommands print an error and exit non-zero."""
+    result = run_cmd(["cmd-logger", "foo"])
+    assert result.returncode != 0
+    assert "Invalid command" in result.stderr
+
+
+def test_start_logging_creates_file(setup_env):
+    """Test that starting logging creates the log file if it does not exist."""
+    result = run_cmd(["cmd-logger", "start", "cmd-log"])
+    assert result.returncode == 0
+    assert "Logging started" in result.stdout
     assert os.path.exists(LOG_FILE)
 
 
-def test_logging_commands(clean_log_file):
-    """
-    Test that 'start' logs commands to the file.
-    """
-    # Start logging
-    run_command(f"{CMD_LOGGER_CMD} start")
-    time.sleep(1)  # Allow tool to initialize
-
-    # Run some sample shell commands
-    run_command("echo Hello")
-    run_command("ls")
-    run_command("pwd")
-
-    # Stop logging
-    run_command(f"{CMD_LOGGER_CMD} stop")
-    time.sleep(1)  # Allow clean stop
-
-    # Verify the log file contents
-    with open(LOG_FILE, "r") as f:
-        content = f.read()
-
-    assert "echo Hello" in content
-    assert "ls" in content
-    assert "pwd" in content
+def test_stop_logging(setup_env):
+    """Test stopping logging gracefully."""
+    run_cmd(["cmd-logger", "start", "cmd-log"])
+    result = run_cmd(["cmd-logger", "stop", "cmd-log"])
+    assert result.returncode == 0
+    assert "Logging stopped" in result.stdout
 
 
-def test_stop_logging_commands(clean_log_file):
-    """
-    Test that after 'stop', no commands are logged.
-    """
-    # Start logging
-    run_command(f"{CMD_LOGGER_CMD} start")
-    time.sleep(1)
+def test_status_logging_active(setup_env):
+    """Test that status shows logging is active after starting."""
+    run_cmd(["cmd-logger", "start", "cmd-log"])
+    result = run_cmd(["cmd-logger", "status", "cmd-log"])
+    assert result.returncode == 0
+    assert "Logging is active" in result.stdout
 
-    # Run a command
-    run_command("echo FirstCommand")
+
+def test_status_logging_inactive(setup_env):
+    """Test that status shows logging is inactive when stopped."""
+    result = run_cmd(["cmd-logger", "status", "cmd-log"])
+    assert result.returncode == 0
+    assert "Logging is inactive" in result.stdout
+
+
+def test_logging_commands_to_file(setup_env):
+    """Test that executed commands are logged when logging is active."""
+    run_cmd(["cmd-logger", "start", "cmd-log"])
+    # Simulate a command
+    subprocess.run(["echo", "Hello, world!"])
+    subprocess.run(["ls"])
 
     # Stop logging
-    run_command(f"{CMD_LOGGER_CMD} stop")
-    time.sleep(1)
+    run_cmd(["cmd-logger", "stop", "cmd-log"])
 
-    # Run another command (should NOT be logged)
-    run_command("echo ShouldNotLog")
-
-    # Verify the log file
+    # Verify that the command was logged
+    assert os.path.exists(LOG_FILE)
     with open(LOG_FILE, "r") as f:
-        content = f.read()
-
-    assert "FirstCommand" in content
-    assert "ShouldNotLog" not in content
-
-
-def test_status_after_start_and_stop(clean_log_file):
-    """
-    Test the 'status' command to show logging activity.
-    """
-    # Check status before starting
-    out, _, _ = run_command(f"{CMD_LOGGER_CMD} status")
-    assert "not active" in out.lower()
-
-    # Start logging
-    run_command(f"{CMD_LOGGER_CMD} start")
-    time.sleep(1)
-
-    # Check status
-    out, _, _ = run_command(f"{CMD_LOGGER_CMD} status")
-    assert "active" in out.lower()
-
-    # Stop logging
-    run_command(f"{CMD_LOGGER_CMD} stop")
-    time.sleep(1)
-
-    # Check status again
-    out, _, _ = run_command(f"{CMD_LOGGER_CMD} status")
-    assert "not active" in out.lower()
+        log_contents = f.read()
+    assert "echo Hello, world!" in log_contents
+    assert "ls" in log_contents
 
 
-def test_invalid_command(clean_log_file):
-    """
-    Test that an invalid command shows an error message.
-    """
-    out, err, code = run_command(f"{CMD_LOGGER_CMD} invalid_command")
-    assert code != 0
-    assert "Unknown command" in err or "Error" in err
+def test_logging_does_not_append_when_stopped(setup_env):
+    """Test that no new commands are logged when logging is stopped."""
+    run_cmd(["cmd-logger", "start", "cmd-log"])
+    subprocess.run(["echo", "Logged Command"])
+    run_cmd(["cmd-logger", "stop", "cmd-log"])
+    subprocess.run(["echo", "Unlogged Command"])
 
-
-def test_append_mode(clean_log_file):
-    """
-    Test that the log file appends new commands, rather than overwriting.
-    """
-    # Start logging and run a command
-    run_command(f"{CMD_LOGGER_CMD} start")
-    time.sleep(1)
-    run_command("echo FirstCommand")
-    run_command(f"{CMD_LOGGER_CMD} stop")
-    time.sleep(1)
-
-    # Restart logging and run another command
-    run_command(f"{CMD_LOGGER_CMD} start")
-    time.sleep(1)
-    run_command("echo SecondCommand")
-    run_command(f"{CMD_LOGGER_CMD} stop")
-
-    # Verify both commands are in the file
+    # Verify only the first command was logged
     with open(LOG_FILE, "r") as f:
-        content = f.read()
+        log_contents = f.read()
+    assert "Logged Command" in log_contents
+    assert "Unlogged Command" not in log_contents
 
-    assert "FirstCommand" in content
-    assert "SecondCommand" in content
+
+def test_log_file_persistence(setup_env):
+    """Test that the log file persists between multiple start/stop cycles."""
+    run_cmd(["cmd-logger", "start", "cmd-log"])
+    subprocess.run(["echo", "First Command"])
+    run_cmd(["cmd-logger", "stop", "cmd-log"])
+
+    run_cmd(["cmd-logger", "start", "cmd-log"])
+    subprocess.run(["echo", "Second Command"])
+    run_cmd(["cmd-logger", "stop", "cmd-log"])
+
+    # Verify both commands are logged
+    with open(LOG_FILE, "r") as f:
+        log_contents = f.read()
+    assert "First Command" in log_contents
+    assert "Second Command" in log_contents
+
+
+def test_log_file_error_handling(setup_env):
+    """Test that the tool handles file write errors gracefully."""
+    # Make log file unwritable
+    open(LOG_FILE, "w").close()
+    os.chmod(LOG_FILE, 0o444)  # Read-only
+
+    result = run_cmd(["cmd-logger", "start", "cmd-log"])
+    assert result.returncode != 0
+    assert "Error: Cannot write to log file" in result.stderr
+
+    os.chmod(LOG_FILE, 0o644)  # Restore permissions
