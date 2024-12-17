@@ -4,6 +4,7 @@ You need to implement a CLI tool called `cmd-logger` that can:
 2. Stop logging commands.
 3. Show whether logging is active or not.
 4. Provide a helpful `--help` output.
+5. Ensure that after your implementation is complete, all tests in app/tests/test.py are passing.
   
 This includes:
 - A `start` command that begins logging new commands to a persistent log file (e.g. `~/.cmd_logger_history.txt`).
@@ -33,24 +34,12 @@ The solution should handle unexpected commands gracefully and should be straight
 4. **Help and Documentation:**
    - The `--help` option must clearly describe how to use `start`, `stop`, `status`.
    
-5. **Tests & Verification:**
-   - The provided test suite will run commands and verify:
-     - Help output correctness.
-     - Proper start/stop/status functionality.
-     - Correct logging behavior (commands appear in the file as expected).
-     - Error handling for unknown commands and permissions issues.
-   
-6. **Implementation Constraints:**
+5. **Implementation Constraints:**
    - Must use Python's standard libraries (e.g., `argparse` for CLI parsing).
    - Code should be clean, well-structured, and documented.
    - Include a README or instructions in the code repository.
 
 # IMPLEMENTATION
-Carefully read the provided tests (test cases and pseudo-code examples). Implement the `cmd-logger` tool so that all these tests pass. You may create any necessary files, such as:
+Carefully read the provided tests (test cases and pseudo-code examples). Implement the `cmd-logger` tool so that all these tests pass.
 
-- `cmd_logger.py`: The main CLI implementation using `argparse`.
-- A script for logging logic (if separate from CLI code).
-- A `README.md` or similar document explaining installation and usage.
-- The logging mechanism for capturing executed commands (you may need to consider shell integration or a simulation for the sake of testing, depending on the environment).
-
-Ensure that after your implementation is complete, running the test suite as described (e.g., `pytest tests/test.py`) results in all tests passing successfully.
+Ensure that after your implementation is complete, all tests in app/tests/test.py are passing.
