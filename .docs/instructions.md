@@ -1,8 +1,62 @@
-Update the `User` model and all relevant code to add a string field named `name` to the model. This `name` field will be used to store the user's full name.
+# Hello World Endpoint Task
 
-- Update the user model in `app/models.py`
-- Run `alembic revision --autogenerate -m "Add name field to user"` to generate a migration
-- Update `app/schemas/requests.py` and `app/schemas/responses.py` accordingly
-- Update `app/api/endpoints/auth.py` accordingly as well.
+Implement a GET endpoint at `/hello` that returns a JSON response with a "Hello, World!" message.
 
-I have added a failing assert in `app/tests/test_users/test_read_current_user.py` that verifies that the `read_current_user` route returns a `name` field. I have also updated the tests in `app/tests/test_auth/test_register_new_user.py` to pass in a `name` field to the `register_new_user` route. Make sure these tests pass.
+## Requirements
+- Endpoint: GET `/hello`
+- Response: JSON object with key "message" and value "Hello, World!"
+- Status code: 200 OK
+
+## Example Request/Response
+```
+GET /hello
+
+Response:
+{
+    "message": "Hello, World!"
+}
+```
+
+## Implementation Steps
+
+1. **Create the Endpoint:**
+   - Open the file where your API endpoints are defined, typically in `app/api/endpoints/`.
+   - Define a new function for the `/hello` endpoint.
+
+2. **Define the Route:**
+   - Use the FastAPI `@app.get("/hello")` decorator to define the route.
+
+3. **Return the Response:**
+   - Inside the function, return a JSON response with the message "Hello, World!" using FastAPI's `JSONResponse`.
+
+4. **Test the Endpoint:**
+   - Write a test case to ensure the `/hello` endpoint returns the expected JSON response and status code.
+
+### Example Code
+
+```python
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
+
+app = FastAPI()
+
+@app.get("/hello")
+async def read_hello():
+    return JSONResponse(content={"message": "Hello, World!"})
+```
+
+### Example Test
+
+```python
+from fastapi.testclient import TestClient
+from app.main import app  # Adjust the import based on your project structure
+
+client = TestClient(app)
+
+def test_read_hello():
+    response = client.get("/hello")
+    assert response.status_code == 200
+    assert response.json() == {"message": "Hello, World!"}
+```
+
+By following these steps, you will have implemented a simple `/hello` endpoint that returns a "Hello, World!" message in JSON format.

@@ -1,2 +1,1 @@
-app/tests/test_auth/test_register_new_user.py
-app/tests/test_users/test_read_current_user.py
+test_hello.py
