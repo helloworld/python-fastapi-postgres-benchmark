@@ -10,19 +10,21 @@ Your task is to write C unit tests for a C file containing mathematical function
 
 1. First, read and analyze the code in `app/math.h` and `app/math.c`. These files contain several mathematical functions that need to be tested.
 
-2. Create a new file at `app/llm_test.c` that contains C unit tests for ALL functions in math.c. Your test file should:
+2. Second, read and analyze the code in `app/tests/test.py` to understand the test suite that will be run to validate whether you have successfully completed your task or not.
+
+3. Create a new file at `app/llm_test.c` that contains C unit tests for ALL functions in math.c. Your test file should:
    - Include necessary headers (`math.h`, `assert.h`)
    - Have a `main()` function that runs all tests
    - Use the standard C `assert()` macro for validations
 
-3. Requirements for your tests:
+4. Requirements for your tests:
    - Write a test function for each function in math.c
    - Name your test functions as `void test_<function_name>(void)` (e.g., `void test_add(void)` for the `add` function)
    - Include meaningful assertions that verify the correct behavior of each function
    - Test both normal cases and edge cases where appropriate
    - Call all test functions from main()
 
-4. Example test structure:
+5. Example test structure:
 ```c
 #include <assert.h>
 #include "math.h"
@@ -39,7 +41,7 @@ int main(void) {
 }
 ```
 
-5. Your tests will be compiled and run using:
+6. Your tests will be compiled and run using:
 ```bash
 python -m app/tests/test.py -v
 ```
