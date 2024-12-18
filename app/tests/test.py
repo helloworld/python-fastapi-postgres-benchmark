@@ -227,5 +227,39 @@ def test_direct_execution():
     ), f"Cleaned main.py failed to execute: {clean_result.stderr}"
 
 
+def test_dead_code_removal():
+    """Verify that identified dead code has been removed from cleaned repo."""
+
+    # Helper1.py dead code
+    with pytest.raises(ImportError):
+        from app.cleaned_repo.helper1 import ceil, floor
+    with pytest.raises(ImportError):
+        from app.cleaned_repo.helper1 import add, multiply
+
+    # Helper2.py dead code
+    with pytest.raises(ImportError):
+        from app.cleaned_repo.helper2 import ceiling, floordiv
+    with pytest.raises(ImportError):
+        from app.cleaned_repo.helper2 import subtract, divide
+
+    # Helper3.py dead code
+    with pytest.raises(ImportError):
+        from app.cleaned_repo.helper3 import modulus, squareboth
+    with pytest.raises(ImportError):
+        from app.cleaned_repo.helper3 import (
+            power,
+            calculate_statistics,
+            fibonacci_power_sum,
+        )
+
+    # Verify AdvancedOperations doesn't have redundant multiply
+    from app.cleaned_repo.helper2 import AdvancedOperations
+
+    advanced_ops = AdvancedOperations()
+    assert not hasattr(
+        advanced_ops, "multiply"
+    ), "Redundant multiply method should be removed"
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
