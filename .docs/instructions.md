@@ -1,40 +1,57 @@
-# LLM Unit Test Writing Challenge
+# LLM C Unit Test Writing Challenge
 
-Your task is to write unit tests for a C file containing mathematical functions. This is a test of your ability to:
+Your task is to write C unit tests for a C file containing mathematical functions. This is a test of your ability to:
 1. Read and understand existing code
-2. Write comprehensive unit tests
+2. Write comprehensive unit tests in C
 3. Ensure proper test coverage
-4. Create tests that pass validation
+4. Create tests that pass compilation and execution
 
 ## Instructions
 
-1. First, read and analyze the C code in `app/math.c`. This file contains several mathematical functions that need to be tested.
+1. First, read and analyze the code in `app/math.h` and `app/math.c`. These files contain several mathematical functions that need to be tested.
 
-2. Create a new file at `app/tests/llm_generated_test.py` that contains unit tests for ALL functions in the C file.
+2. Create a new file at `app/llm_test.c` that contains C unit tests for ALL functions in math.c. Your test file should:
+   - Include necessary headers (`math.h`, `assert.h`)
+   - Have a `main()` function that runs all tests
+   - Use the standard C `assert()` macro for validations
 
 3. Requirements for your tests:
-   - Write at least one test function for each function in math.c
-   - Name your test functions as `test_<function_name>` (e.g., `test_add` for the `add` function)
+   - Write a test function for each function in math.c
+   - Name your test functions as `void test_<function_name>(void)` (e.g., `void test_add(void)` for the `add` function)
    - Include meaningful assertions that verify the correct behavior of each function
    - Test both normal cases and edge cases where appropriate
-   - Ensure your tests can be run using pytest
+   - Call all test functions from main()
 
-4. Your tests will be validated by running:
-```bash
-pytest app/tests/test.py
+4. Example test structure:
+```c
+#include <assert.h>
+#include "math.h"
+
+void test_add(void) {
+    assert(add(2, 3) == 5);
+    assert(add(-1, 1) == 0);
+}
+
+int main(void) {
+    test_add();
+    // ... other test function calls ...
+    return 0;
+}
 ```
 
-This will check that:
-- All functions have corresponding test functions
-- Each function has at least one assertion
-- The tests are syntactically correct and can be executed
-- The test file exists in the correct location
+5. Your tests will be compiled and run using:
+```bash
+cd app
+make
+./test_runner
+```
 
 ## Success Criteria
 
 Your submission will be considered successful if:
 1. All functions from math.c have corresponding test functions
 2. Each test function contains at least one meaningful assertion
-3. Running `pytest app/tests/test.py` passes without any failures
+3. The code compiles successfully with `make`
+4. All tests pass when running the test executable
 
 Remember to test both the basic functionality and any edge cases for each function.
