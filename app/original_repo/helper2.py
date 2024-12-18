@@ -1,10 +1,11 @@
-from app.original_repo.helper1 import MathBase, validate_positive, compute_percentage
+from app.original_repo.helper1 import MathBase, validate_positive, compute_percentage, BasicOperations
 from functools import lru_cache
 
 class AdvancedOperations(MathBase):
     def __init__(self, cache_size=128):
         super().__init__()
         self.cache_size = cache_size
+        self._basic_ops = BasicOperations()  # Add this to use basic operations
         
     @lru_cache(maxsize=128)
     def divide(self, a, b):
@@ -18,6 +19,11 @@ class AdvancedOperations(MathBase):
         if not self.validate_inputs(a, b):
             raise TypeError("Inputs must be numeric")
         return self.round_result(a - b)
+    
+    def multiply(self, a, b):  # Add multiply method
+        if not self.validate_inputs(a, b):
+            raise TypeError("Inputs must be numeric")
+        return self.round_result(a * b)
     
     @validate_positive
     def calculate_ratio(self, a, b):
