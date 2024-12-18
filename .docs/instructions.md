@@ -1,38 +1,40 @@
-# Task: Code Cleanup - Removing Redundant or Unused Code
+# LLM Unit Test Writing Challenge
 
-## Objective
-Your task is to review the code in this repository and perform a cleanup to remove redundant or unused code. The repository consists of the following files:
-
-1. `helper1.py`: Contains utility functions, some of which are unused or redundant.
-2. `helper2.py`: Contains additional utilities, with potential overlap with `helper1.py`.
-3. `helper3.py`: Contains more utilities, some of which may not be used in the project.
-4. `main.py`: The main application logic that uses functions from the `helper` files.
+Your task is to write unit tests for a C file containing mathematical functions. This is a test of your ability to:
+1. Read and understand existing code
+2. Write comprehensive unit tests
+3. Ensure proper test coverage
+4. Create tests that pass validation
 
 ## Instructions
-1. **Analyze the Repository**:
-   - Carefully examine the code app/original_repo/.
-   - Identify functions or code blocks that are not used anywhere in the repository.
-   - Identify redundancy where similar or identical functionality is implemented multiple times.
 
-2. **Clean Up**:
-   - Make a copy of app/original_repo in app/cleaned_repo
-   - Remove any code that is unused across the repository.
-   - Consolidate redundant functionality to a single implementation and update references accordingly.
-   - Ensure that all necessary imports and functions used in `main.py` are preserved and functional.
+1. First, read and analyze the C code in `app/math.c`. This file contains several mathematical functions that need to be tested.
 
-3. **Validate Functionality**:
-   - After the cleanup, ensure the `main.py` script runs without errors.
-   - The core functionality of the repository should remain unchanged.
+2. Create a new file at `app/tests/llm_generated_test.py` that contains unit tests for ALL functions in the C file.
 
-4. MANDATORY: there is a test suite located in app/tests/test.py. make sure to read it and make sure that it passes to verify that you have finished the objective correctly.
+3. Requirements for your tests:
+   - Write at least one test function for each function in math.c
+   - Name your test functions as `test_<function_name>` (e.g., `test_add` for the `add` function)
+   - Include meaningful assertions that verify the correct behavior of each function
+   - Test both normal cases and edge cases where appropriate
+   - Ensure your tests can be run using pytest
 
-## Output
-Submit the cleaned-up repository. The cleaned code should:
-- Contain no unused or redundant functions.
-- Preserve all functionality used in `main.py`.
-- Be well-organized and easy to read.
-- MANDATORY: there is a test suite located in app/tests/test.py. make sure to read it and make sure that it passes.
+4. Your tests will be validated by running:
+```bash
+pytest app/tests/test.py
+```
 
-## Notes
-- Focus on readability and maintainability of the code.
-- Avoid introducing new functionality or altering the logic in `main.py` beyond updating references to cleaned-up functions.
+This will check that:
+- All functions have corresponding test functions
+- Each function has at least one assertion
+- The tests are syntactically correct and can be executed
+- The test file exists in the correct location
+
+## Success Criteria
+
+Your submission will be considered successful if:
+1. All functions from math.c have corresponding test functions
+2. Each test function contains at least one meaningful assertion
+3. Running `pytest app/tests/test.py` passes without any failures
+
+Remember to test both the basic functionality and any edge cases for each function.

@@ -1,265 +1,94 @@
-import pytest
 import os
 import subprocess
-import numpy as np
-from pathlib import Path
-from coverage import Coverage
-
-# Define paths for the repository and the cleaned repository
-ORIGINAL_REPO_PATH = "./app/original_repo"
-CLEANED_REPO_PATH = "./app/cleaned_repo"
+import pytest
+import re
 
 
-def test_basic_code_functionality_original():
-    """Verify the original code produces expected results before any changes."""
-    from app.original_repo.main import runner
-
-    expected_results = {
-        "add": 8,  # 5 + 3
-        "multiply": 15,  # 5 * 3
-        "subtract": 2,  # 5 - 3
-        "power": 125,  # 5^3
-    }
-    results = runner()
-
-    # Check only the basic operations (backward compatibility)
-    for key in expected_results:
-        assert (
-            results[key] == expected_results[key]
-        ), f"Original code produced unexpected results for {key}: {results[key]}"
+def check_test_file_exists():
+    """Verify that the LLM created the test file"""
+    test_file = "app/llm_test.c"  # Changed to use path from root directory
+    assert os.path.exists(test_file), f"LLM must create a test file at {test_file}"
+    return test_file
 
 
-def test_basic_code_functionality_cleaned():
-    """Verify the original code produces expected results before any changes."""
-    from app.cleaned_repo.main import runner
+def count_test_functions(test_file: str) -> set:
+    """Extract test function names from the C test file"""
+    with open(test_file, "r") as f:
+        content = f.read()
 
-    expected_results = {
-        "add": 8,  # 5 + 3
-        "multiply": 15,  # 5 * 3
-        "subtract": 2,  # 5 - 3
-        "power": 125,  # 5^3
-    }
-    results = runner()
+    # Look for test function declarations (test_*)
+    test_funcs = set(re.findall(r"void\s+(test_\w+)\s*\(\s*void\s*\)", content))
 
-    # Check only the basic operations (backward compatibility)
-    for key in expected_results:
-        assert (
-            results[key] == expected_results[key]
-        ), f"Original code produced unexpected results for {key}: {results[key]}"
+    # Extract the actual function being tested from the test name
+    return {func[5:] for func in test_funcs}  # Remove 'test_' prefix
 
 
-def test_advanced_operations_original():
-    """Test the new advanced operations and statistical features."""
-    from app.original_repo.main import runner
-    from app.original_repo.main import CalculationConfig
+def count_assertions(test_file: str) -> int:
+    """Count the number of assertions in the test file"""
+    with open(test_file, "r") as f:
+        content = f.read()
 
-    config = CalculationConfig(precision=3, base_numbers=[2.0, 3.0, 4.0, 5.0, 6.0])
-
-    results = runner(config)
-
-    # Verify advanced metrics exist
-    assert "statistics" in results, "Advanced statistics not present in results"
-    assert "fibonacci_power_sum" in results, "Fibonacci power sum not present"
-    assert "percentage_changes" in results, "Percentage changes not present"
-
-    # Verify statistics calculations
-    stats = results["statistics"]
-    assert abs(stats["mean"] - 4.0) < 1e-6, "Incorrect mean calculation"
-    assert abs(stats["geometric_mean"] - 3.728) < 1e-3, "Incorrect geometric mean"
-
-    # Verify percentage changes
-    changes = results["percentage_changes"]
-    assert len(changes) == 4, "Incorrect number of percentage changes"
-    assert abs(changes[0] - 50.0) < 1e-6, "Incorrect percentage change calculation"
+    # Count assert statements - looking for assert(*) patterns
+    assertions = re.findall(r"assert\s*\([^;]+\);", content)
+    return len(assertions)
 
 
-def test_advanced_operations_cleaned():
-    """Test the new advanced operations and statistical features."""
-    from app.cleaned_repo.main import runner
-    from app.cleaned_repo.main import CalculationConfig
-
-    config = CalculationConfig(precision=3, base_numbers=[2.0, 3.0, 4.0, 5.0, 6.0])
-
-    results = runner(config)
-
-    # Verify advanced metrics exist
-    assert "statistics" in results, "Advanced statistics not present in results"
-    assert "fibonacci_power_sum" in results, "Fibonacci power sum not present"
-    assert "percentage_changes" in results, "Percentage changes not present"
-
-    # Verify statistics calculations
-    stats = results["statistics"]
-    assert abs(stats["mean"] - 4.0) < 1e-6, "Incorrect mean calculation"
-    assert abs(stats["geometric_mean"] - 3.728) < 1e-3, "Incorrect geometric mean"
-
-    # Verify percentage changes
-    changes = results["percentage_changes"]
-    assert len(changes) == 4, "Incorrect number of percentage changes"
-    assert abs(changes[0] - 50.0) < 1e-6, "Incorrect percentage change calculation"
+def get_required_functions():
+    """Get the list of functions that should be tested"""
+    return {"add", "subtract", "multiply", "is_even", "calculate_expression"}
 
 
-def test_error_handling_original():
-    """Test error handling and input validation."""
-    from app.original_repo.helper1 import BasicOperations, compute_percentage
-    from app.original_repo.helper2 import AdvancedOperations
+def compile_and_run_tests():
+    """Compile and run the C tests"""
+    # Change to app directory
+    os.chdir('app')
 
-    basic_ops = BasicOperations()
-    advanced_ops = AdvancedOperations()
+    # Run make clean and make
+    try:
+        subprocess.run(["make", "clean"], check=True, capture_output=True)
+        subprocess.run(["make"], check=True, capture_output=True)
+    except subprocess.CalledProcessError as e:
+        pytest.fail(f"Failed to compile tests: {e.stderr.decode()}")
 
-    # Test input validation
-    with pytest.raises(TypeError):
-        basic_ops.add("not a number", 5)
-
-    with pytest.raises(ValueError):
-        advanced_ops.divide(10, 0)
-
-    # Test decorator validation
-    with pytest.raises(ValueError):
-        compute_percentage(-1, 100)
-
-
-def test_error_handling_cleaned():
-    """Test error handling and input validation."""
-    from app.cleaned_repo.helper1 import BasicOperations, compute_percentage
-    from app.cleaned_repo.helper2 import AdvancedOperations
-
-    basic_ops = BasicOperations()
-    advanced_ops = AdvancedOperations()
-
-    # Test input validation
-    with pytest.raises(TypeError):
-        basic_ops.add("not a number", 5)
-
-    with pytest.raises(ValueError):
-        advanced_ops.divide(10, 0)
-
-    # Test decorator validation
-    with pytest.raises(ValueError):
-        compute_percentage(-1, 100)
+    # Run the test executable
+    try:
+        result = subprocess.run(['./test_runner'], check=True, capture_output=True)
+        success = result.returncode == 0
+    except subprocess.CalledProcessError as e:
+        pytest.fail(f"Tests failed with output: {e.stderr.decode()}")
+        success = False
+    finally:
+        # Change back to original directory
+        os.chdir('..')
+        return success
 
 
-def test_configuration_management_original():
-    """Test that configuration options work correctly."""
-    from app.original_repo.main import runner
-    from app.original_repo.main import CalculationConfig
+def test_llm_test_implementation():
+    """Main test to verify LLM's test file"""
+    # 1. Check if test file exists
+    test_file = check_test_file_exists()
 
-    # Test default configuration
-    default_config = CalculationConfig()
-    assert default_config.precision == 2
-    assert default_config.cache_size == 128
-    assert len(default_config.base_numbers) == default_config.sample_size
+    # 2. Get functions that should be tested
+    required_functions = get_required_functions()
 
-    # Test custom configuration
-    custom_config = CalculationConfig(
-        precision=4, cache_size=256, base_numbers=[1.0, 2.0, 3.0, 4.0, 5.0]
-    )
-    results = runner(custom_config)
+    # 3. Get functions that are actually tested
+    tested_functions = count_test_functions(test_file)
 
-    # Verify precision is respected
-    assert isinstance(results["add"], float), "Precision not applied correctly"
+    # 4. Check if all functions are tested
+    missing_tests = required_functions - tested_functions
+    assert not missing_tests, f"Missing tests for functions: {missing_tests}"
+
+    # 5. Check for minimum assertion count (at least one per function)
+    min_required_assertions = len(required_functions)
+    actual_assertions = count_assertions(test_file)
+
     assert (
-        str(results["add"]).count(".") == 0
-        or len(str(results["add"]).split(".")[1]) <= 4
-    )
+        actual_assertions >= min_required_assertions
+    ), f"Expected at least {min_required_assertions} assertions, but found {actual_assertions}"
 
-
-def test_configuration_management_cleaned():
-    """Test that configuration options work correctly."""
-    from app.cleaned_repo.main import runner
-    from app.cleaned_repo.main import CalculationConfig
-
-    # Test default configuration
-    default_config = CalculationConfig()
-    assert default_config.precision == 2
-    assert default_config.cache_size == 128
-    assert len(default_config.base_numbers) == default_config.sample_size
-
-    # Test custom configuration
-    custom_config = CalculationConfig(
-        precision=4, cache_size=256, base_numbers=[1.0, 2.0, 3.0, 4.0, 5.0]
-    )
-    results = runner(custom_config)
-
-    # Verify precision is respected
-    assert isinstance(results["add"], float), "Precision not applied correctly"
-    assert (
-        str(results["add"]).count(".") == 0
-        or len(str(results["add"]).split(".")[1]) <= 4
-    )
-
-
-def test_module_structure():
-    """Verify the cleaned code maintains proper module structure."""
-    required_files = [
-        "__init__.py",
-        "main.py",
-        "helper1.py",
-        "helper2.py",
-        "helper3.py",
-    ]
-
-    for file in required_files:
-        path = Path(CLEANED_REPO_PATH) / file
-        assert path.exists(), f"Required file {file} is missing from cleaned code"
-        assert path.stat().st_size > 0, f"Required file {file} is empty"
-
-
-def test_direct_execution():
-    """Verify both original and cleaned code can be executed directly."""
-    # Test original code execution
-    orig_result = subprocess.run(
-        ["python", "-m", "app.original_repo.main"],
-        capture_output=True,
-        text=True,
-    )
-    assert (
-        orig_result.returncode == 0
-    ), f"Original main.py failed to execute: {orig_result.stderr}"
-
-    # Test cleaned code execution
-    clean_result = subprocess.run(
-        ["python", "-m", "app.cleaned_repo.main"],
-        capture_output=True,
-        text=True,
-    )
-    assert (
-        clean_result.returncode == 0
-    ), f"Cleaned main.py failed to execute: {clean_result.stderr}"
-
-
-def test_dead_code_removal():
-    """Verify that identified dead code has been removed from cleaned repo."""
-
-    # Helper1.py dead code
-    with pytest.raises(ImportError):
-        from app.cleaned_repo.helper1 import ceil, floor
-    with pytest.raises(ImportError):
-        from app.cleaned_repo.helper1 import add, multiply
-
-    # Helper2.py dead code
-    with pytest.raises(ImportError):
-        from app.cleaned_repo.helper2 import ceiling, floordiv
-    with pytest.raises(ImportError):
-        from app.cleaned_repo.helper2 import subtract, divide
-
-    # Helper3.py dead code
-    with pytest.raises(ImportError):
-        from app.cleaned_repo.helper3 import modulus, squareboth
-    with pytest.raises(ImportError):
-        from app.cleaned_repo.helper3 import (
-            power,
-            calculate_statistics,
-            fibonacci_power_sum,
-        )
-
-    # Verify AdvancedOperations doesn't have redundant multiply
-    from app.cleaned_repo.helper2 import AdvancedOperations
-
-    advanced_ops = AdvancedOperations()
-    assert not hasattr(
-        advanced_ops, "multiply"
-    ), "Redundant multiply method should be removed"
+    # 6. Compile and run the tests
+    assert compile_and_run_tests(), "C tests failed to execute successfully"
 
 
 if __name__ == "__main__":
-    pytest.main([__file__, "-v"])
+    pytest.main([__file__])
