@@ -41,9 +41,10 @@ int main(void) {
 
 5. Your tests will be compiled and run using:
 ```bash
-make
 python -m app/tests/test.py -v
 ```
+
+you may add any files or code relevant to be able to run test.py. for example, you may want to consider a makefile or a test_runner harness that gets called by app/tests/test.py
 
 ## Success Criteria
 

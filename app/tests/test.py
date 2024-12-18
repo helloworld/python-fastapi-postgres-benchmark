@@ -41,7 +41,7 @@ def get_required_functions():
 def compile_and_run_tests():
     """Compile and run the C tests"""
     # Change to app directory
-    os.chdir('app')
+    os.chdir("app")
 
     # Run make clean and make
     try:
@@ -52,14 +52,14 @@ def compile_and_run_tests():
 
     # Run the test executable
     try:
-        result = subprocess.run(['./test_runner'], check=True, capture_output=True)
+        result = subprocess.run(["./test_runner"], check=True, capture_output=True)
         success = result.returncode == 0
     except subprocess.CalledProcessError as e:
         pytest.fail(f"Tests failed with output: {e.stderr.decode()}")
         success = False
     finally:
         # Change back to original directory
-        os.chdir('..')
+        os.chdir("..")
         return success
 
 
