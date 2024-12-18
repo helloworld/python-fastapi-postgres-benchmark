@@ -6,7 +6,7 @@ import re
 
 def check_test_file_exists():
     """Verify that the LLM created the test file"""
-    test_file = "app/llm_test.c"  # Changed to use path from root directory
+    test_file = "app/llm_test.c"
     assert os.path.exists(test_file), f"LLM must create a test file at {test_file}"
     return test_file
 
@@ -35,13 +35,30 @@ def count_assertions(test_file: str) -> int:
 
 def get_required_functions():
     """Get the list of functions that should be tested"""
-    return {"add", "subtract", "multiply", "is_even", "calculate_expression"}
+    return {"create_default_state"}
 
 
 def compile_and_run_tests():
     """Compile and run the C tests"""
     # Change to app directory
     os.chdir("app")
+
+    # Create a simple Makefile if it doesn't exist
+    if not os.path.exists("Makefile"):
+        with open("Makefile", "w") as f:
+            f.write(
+                """
+                    CC=gcc
+                    CFLAGS=-I. -Isnake
+                    SNAKE_OBJS=snake/state.o snake/snake_utils.o
+                    
+                    test_runner: llm_test.c $(SNAKE_OBJS)
+                    \t$(CC) $(CFLAGS) -o test_runner llm_test.c $(SNAKE_OBJS)
+                    
+                    clean:
+                    \trm -f test_runner *.o
+                    """
+            )
 
     # Run make clean and make
     try:
@@ -74,17 +91,15 @@ def test_llm_test_implementation():
     # 3. Get functions that are actually tested
     tested_functions = count_test_functions(test_file)
 
-    # 4. Check if all functions are tested
+    # 4. Check if the required function is tested
     missing_tests = required_functions - tested_functions
-    assert not missing_tests, f"Missing tests for functions: {missing_tests}"
+    assert not missing_tests, f"Missing test for create_default_state function"
 
-    # 5. Check for minimum assertion count (at least one per function)
-    min_required_assertions = len(required_functions)
+    # 5. Check for minimum assertion count (at least one assertion)
     actual_assertions = count_assertions(test_file)
-
     assert (
-        actual_assertions >= min_required_assertions
-    ), f"Expected at least {min_required_assertions} assertions, but found {actual_assertions}"
+        actual_assertions >= 1
+    ), f"Expected at least 1 assertion, but found {actual_assertions}"
 
     # 6. Compile and run the tests
     assert compile_and_run_tests(), "C tests failed to execute successfully"
