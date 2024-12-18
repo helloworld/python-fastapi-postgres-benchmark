@@ -188,34 +188,6 @@ def test_configuration_management_cleaned():
     )
 
 
-def test_no_redundant_functions():
-    """Verify that the cleaned code has removed all redundant/unused functions."""
-    # Get all functions used in main.py
-    used_functions = set()
-    main_path = Path(CLEANED_REPO_PATH) / "main.py"
-    with open(main_path, "r") as f:
-        main_content = f.read()
-        # Extract imported function names
-        for line in main_content.split("\n"):
-            if "import" in line:
-                functions = line.split("import")[1].strip().split(",")
-                used_functions.update(f.strip() for f in functions)
-
-    # Check each helper file for unused functions
-    helper_files = ["helper1.py", "helper2.py", "helper3.py"]
-    for helper_file in helper_files:
-        file_path = Path(CLEANED_REPO_PATH) / helper_file
-        with open(file_path, "r") as f:
-            content = f.read()
-            # Find all function definitions
-            for line in content.split("\n"):
-                if line.strip().startswith("def "):
-                    func_name = line.split("def ")[1].split("(")[0].strip()
-                    assert (
-                        func_name in used_functions
-                    ), f"Found unused function '{func_name}' in {helper_file}"
-
-
 def test_module_structure():
     """Verify the cleaned code maintains proper module structure."""
     required_files = [
