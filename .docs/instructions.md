@@ -31,7 +31,7 @@ Submit the cleaned-up repository. The cleaned code should:
 - Contain no unused or redundant functions.
 - Preserve all functionality used in `main.py`.
 - Be well-organized and easy to read.
-MANDATORY: there is a test suite located in app/tests/test.py. make sure to read it and make sure that it passes.
+- MANDATORY: there is a test suite located in app/tests/test.py. make sure to read it and make sure that it passes.
 
 ## Notes
 - Focus on readability and maintainability of the code.
