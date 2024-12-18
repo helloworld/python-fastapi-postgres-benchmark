@@ -41,9 +41,8 @@ int main(void) {
 
 5. Your tests will be compiled and run using:
 ```bash
-cd app
 make
-./test_runner
+python -m app/tests/test.py -v
 ```
 
 ## Success Criteria
@@ -51,7 +50,7 @@ make
 Your submission will be considered successful if:
 1. All functions from math.c have corresponding test functions
 2. Each test function contains at least one meaningful assertion
-3. The code compiles successfully with `make`
-4. All tests pass when running the test executable
+3. The code you wrote compiles successfully with `make`
+4. All tests pass when running the test specified above
 
 Remember to test both the basic functionality and any edge cases for each function.
