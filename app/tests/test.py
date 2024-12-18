@@ -40,44 +40,24 @@ def get_required_functions():
 
 def compile_and_run_tests():
     """Compile and run the C tests"""
-    # Change to app directory
-    os.chdir("app")
-
-    # Create a simple Makefile if it doesn't exist
-    if not os.path.exists("Makefile"):
-        with open("Makefile", "w") as f:
-            f.write(
-                """
-                    CC=gcc
-                    CFLAGS=-I. -Isnake
-                    SNAKE_OBJS=snake/state.o snake/snake_utils.o
-                    
-                    test_runner: llm_test.c $(SNAKE_OBJS)
-                    \t$(CC) $(CFLAGS) -o test_runner llm_test.c $(SNAKE_OBJS)
-                    
-                    clean:
-                    \trm -f test_runner *.o
-                    """
-            )
-
-    # Run make clean and make
+    original_dir = os.getcwd()
     try:
+        # Change to app directory
+        os.chdir("app")
+
+        # Run make clean and make
         subprocess.run(["make", "clean"], check=True, capture_output=True)
         subprocess.run(["make"], check=True, capture_output=True)
-    except subprocess.CalledProcessError as e:
-        pytest.fail(f"Failed to compile tests: {e.stderr.decode()}")
 
-    # Run the test executable
-    try:
+        # Run the test executable
         result = subprocess.run(["./test_runner"], check=True, capture_output=True)
-        success = result.returncode == 0
+        return result.returncode == 0
+
     except subprocess.CalledProcessError as e:
-        pytest.fail(f"Tests failed with output: {e.stderr.decode()}")
-        success = False
+        pytest.fail(f"Test execution failed: {e.stderr.decode()}")
+        return False
     finally:
-        # Change back to original directory
-        os.chdir("..")
-        return success
+        os.chdir(original_dir)
 
 
 def test_llm_test_implementation():

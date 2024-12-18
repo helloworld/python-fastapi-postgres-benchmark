@@ -1,19 +1,26 @@
 CC=gcc
-CFLAGS=-Wall -Wextra -I.
+CFLAGS=-Wall -Wno-unused-function -Wconversion -std=c99 -g -I.
 
-all: libmath.a test_runner
+# Object files
+OBJS=snake/state.o snake/snake_utils.o llm_test.o
 
-libmath.a: math.o
-	ar rcs libmath.a math.o
+# Main target
+test_runner: $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS)
 
-math.o: math.c math.h
-	$(CC) $(CFLAGS) -c math.c
+# Individual object files
+snake/state.o: snake/state.c snake/state.h snake/snake_utils.h
+	$(CC) $(CFLAGS) -c -o $@ $<
 
-test_runner: llm_test.o libmath.a
-	$(CC) $(CFLAGS) -o test_runner llm_test.o -L. -lmath
+snake/snake_utils.o: snake/snake_utils.c snake/snake_utils.h
+	$(CC) $(CFLAGS) -c -o $@ $<
 
-llm_test.o: llm_test.c math.h
-	$(CC) $(CFLAGS) -c llm_test.c
+llm_test.o: llm_test.c snake/state.h
+	$(CC) $(CFLAGS) -c -o $@ $<
 
+.PHONY: clean test
 clean:
-	rm -f *.o *.a test_runner
+	rm -f test_runner *.o snake/*.o
+
+test: test_runner
+	./test_runner
