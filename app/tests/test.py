@@ -3,6 +3,7 @@ import os
 import subprocess
 import numpy as np
 from pathlib import Path
+from coverage import Coverage
 
 # Define paths for the repository and the cleaned repository
 ORIGINAL_REPO_PATH = "./app/original_repo"
