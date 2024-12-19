@@ -1,14 +1,23 @@
-# Optimization task
+Task: Help identify the key files needed to bypass Batfish's modeling phase and directly provide inputs to its verification engine.
+Let's focus on the reachability query as a starting point to understand the interface between these phases.
 
-Right now, there is some code in main.py which attempts to do some string searching. It is written poorly and therefore has a very slow runtime on a large input. Can you rewrite the code in a different file, and make it more optimal both algorithmically and also with respect to data structures so it runs faster?
+Context:
+Batfish's architecture has two main phases:
+1. Modeling Phase (Top Half): Ingests router configs and simulates router behavior
+2. Verification Phase (Bottom Half): Takes modeled inputs and performs formal verification
+3. The code that you are tasked to explore and is relevant to answer the task is located at app/batfish
 
-## Requirements
-- final processing of 10 iterations of the search function on shakespeare.txt done within 1 seconds.
+Goal:
+I want to bypass the modeling phase entirely by directly providing the necessary data structures (like FIB/AFT entries) to the verification engine.
 
+Specific Questions:
+1. What are the essential data structures and fields needed to interface directly with the verification engine?
+2. Which source files should I examine to understand and modify this interface?
 
-## Implementation Steps
-read code in app/main.py to understand the current implementation. then, make a new file called optimized.py which contains optimized code. I wrote a test case verifying this in app/test_optimization.py. make sure that test passes.
+Required Output:
+Create a file at app/files_to_explore.txt containing one absolute file path per line for files relevant to this exploration. Example format:
+./app/batfish/projects/batfish/src/test/java/org/batfish/grammar/cisco_asa/CiscoAsaGrammarTest.java
 
+Note: Include ALL paths to files that are directly relevant to understanding or modifying the interface between Batfish's modeling and verification phases. Let's focus on the reachability query as a starting point to understand the interface between these phases.
 
-
-
+Evaluation: Correctness of your exploration will be evaluated by running pytest app/tests/test.py. do NOT look at this test file, since it contains the answers.
