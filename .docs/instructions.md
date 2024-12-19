@@ -25,4 +25,4 @@ Create a file at app/files_to_explore.txt containing one absolute file path per 
 Note: Include ALL paths to files that are directly relevant to understanding or modifying the interface between Batfish's modeling and verification phases. Let's focus on the reachability query as a starting point to understand the interface between these phases.
 
 # Evaluation:
-Correctness of your exploration will be evaluated by running pytest app/tests/test.py. do NOT look at this test file, since it contains the answers.
+Ensure that after you have finished your analysis and written file paths to app/files_to_explore.txt, all tests in app/tests/test.py are passing.
