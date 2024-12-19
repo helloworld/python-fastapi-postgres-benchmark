@@ -22,6 +22,7 @@ Specific Questions:
 Create a file at app/files_to_explore.txt containing one absolute file path per line for files relevant to this exploration. Example format:
 ./app/batfish/projects/batfish/src/test/java/org/batfish/grammar/cisco_asa/CiscoAsaGrammarTest.java
 
-# Note: Include ALL paths to files that are directly relevant to understanding or modifying the interface between Batfish's modeling and verification phases. Let's focus on the reachability query as a starting point to understand the interface between these phases.
+Note: Include ALL paths to files that are directly relevant to understanding or modifying the interface between Batfish's modeling and verification phases. Let's focus on the reachability query as a starting point to understand the interface between these phases.
 
-# Evaluation: Correctness of your exploration will be evaluated by running pytest app/tests/test.py. do NOT look at this test file, since it contains the answers.
+# Evaluation:
+Correctness of your exploration will be evaluated by running pytest app/tests/test.py. do NOT look at this test file, since it contains the answers.
