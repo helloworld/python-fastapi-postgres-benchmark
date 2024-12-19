@@ -15,7 +15,7 @@ Your task is to write a comprehensive C unit test suite for a snake game impleme
 
 2. Next, read the tests defined at app/tests/test.py to learn about the success conditions of your task: running `python -m pytest app/tests/test.py -v` should pass in the end.
 
-3. Create a new file at `app/unit_tests.c` that contains a complete test suite. Your test file should:
+3. Create a new file at `app/llm_test.c` that contains a complete test suite. Your test file should:
    - Include necessary headers (`state.h`, `assert.h`)
    - Have a `main()` function that runs all tests
    - Use the standard C `assert()` macro for validations
