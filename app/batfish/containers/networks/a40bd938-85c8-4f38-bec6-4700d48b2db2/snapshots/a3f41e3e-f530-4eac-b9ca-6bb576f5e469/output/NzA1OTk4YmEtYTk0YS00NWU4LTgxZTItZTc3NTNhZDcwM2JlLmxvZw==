@@ -1,0 +1,97 @@
+
+*** READING HOST CONFIGS ***
+Reading: "hosts/host2.json"
+Reading: "hosts/host1.json"
+
+*** PARSING VENDOR CONFIGURATION FILES ***
+Processing: [hosts/host1.json]
+Job terminated successfully with result: <host1> after elapsed time: 00:00:00.00 - 1/2 (50.0%) complete
+Processing: [hosts/host2.json]
+Job terminated successfully with result: <host2> after elapsed time: 00:00:00.00 - 2/2 (100.0%) complete
+Time taken for this task: 0.001 seconds
+Testrig:a3f41e3e-f530-4eac-b9ca-6bb576f5e469 in container:a40bd938-85c8-4f38-bec6-4700d48b2db2 has total number of host configs:2
+*** PARSING VENDOR CONFIGURATION FILES ***
+Processing: [iptables/host2.iptables]
+	Parsing...OK
+	Post-processing...OK
+Job terminated successfully with result: <iptables/host2.iptables> after elapsed time: 00:00:00.00 - 1/2 (50.0%) complete
+Processing: [iptables/host1.iptables]
+	Parsing...OK
+	Post-processing...OK
+Job terminated successfully with result: <iptables/host1.iptables> after elapsed time: 00:00:00.00 - 2/2 (100.0%) complete
+Time taken for this task: 0.001 seconds
+
+*** SERIALIZING VENDOR CONFIGURATION STRUCTURES ***
+Time taken for this task: 0.005 seconds
+
+*** READING DEVICE CONFIGURATION FILES ***
+Reading: "configs/r2.cfg"
+Reading: "configs/r3.cfg"
+Reading: "configs/r1.cfg"
+Reading: "configs/r4.cfg"
+Snapshot a3f41e3e-f530-4eac-b9ca-6bb576f5e469 in network a40bd938-85c8-4f38-bec6-4700d48b2db2 has total number of network configs:4	Parsing...OK
+	Post-processing...OK
+	Parsing...OK
+	Post-processing...OK
+	Parsing...OK
+	Post-processing...OK
+	Parsing...OK
+	Post-processing...OK
+
+*** SERIALIZING VENDOR CONFIGURATION STRUCTURES ***
+Time taken for this task: 0.003 seconds
+
+*** READING AWS CONFIGS ***
+
+*** DESERIALIZING VENDOR CONFIGURATION STRUCTURES ***
+Reading org.batfish.vendor.VendorConfiguration 'host2' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/a3f41e3e-f530-4eac-b9ca-6bb576f5e469/output/vendor/host2'
+Reading org.batfish.vendor.VendorConfiguration 'host1' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/a3f41e3e-f530-4eac-b9ca-6bb576f5e469/output/vendor/host1'
+Reading org.batfish.vendor.VendorConfiguration 'r3' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/a3f41e3e-f530-4eac-b9ca-6bb576f5e469/output/vendor/r3'
+Reading org.batfish.vendor.VendorConfiguration 'r1' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/a3f41e3e-f530-4eac-b9ca-6bb576f5e469/output/vendor/r1'
+Reading org.batfish.vendor.VendorConfiguration 'r4' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/a3f41e3e-f530-4eac-b9ca-6bb576f5e469/output/vendor/r4'
+Reading org.batfish.vendor.VendorConfiguration 'r2' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/a3f41e3e-f530-4eac-b9ca-6bb576f5e469/output/vendor/r2'
+Time taken for this task: 0.002 seconds
+
+*** CONVERTING VENDOR CONFIGURATIONS TO INDEPENDENT FORMAT ***
+Processing: "host2" ...OK
+Job terminated successfully with result: [host2] after elapsed time: 00:00:00.01 - 1/6 (16.7%) complete
+Processing: "r3" ...OK
+Job terminated successfully with result: [r3] after elapsed time: 00:00:00.01 - 2/6 (33.3%) complete
+Processing: "r4" ...OK
+Job terminated successfully with result: [r4] after elapsed time: 00:00:00.02 - 3/6 (50.0%) complete
+Processing: "r1" ...OK
+Job terminated successfully with result: [r1] after elapsed time: 00:00:00.02 - 4/6 (66.7%) complete
+Processing: "r2" ...OK
+Job terminated successfully with result: [r2] after elapsed time: 00:00:00.02 - 5/6 (83.3%) complete
+Processing: "host1" ...OK
+Job terminated successfully with result: [host1] after elapsed time: 00:00:00.02 - 6/6 (100.0%) complete
+Time taken for this task: 0.028 seconds
+
+*** SERIALIZING 6 VENDOR-INDEPENDENT CONFIGURATION STRUCTURES FOR SNAPSHOT A3F41E3E-F530-4EAC-B9CA-6BB576F5E469***
+Loading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=a3f41e3e-f530-4eac-b9ca-6bb576f5e469}
+Loading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=a3f41e3e-f530-4eac-b9ca-6bb576f5e469}, cache miss
+*** DESERIALIZING VENDOR-INDEPENDENT CONFIGURATION STRUCTURES ***
+Reading org.batfish.datamodel.Configuration 'host2' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/a3f41e3e-f530-4eac-b9ca-6bb576f5e469/output/indep/host2'
+Reading org.batfish.datamodel.Configuration 'host1' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/a3f41e3e-f530-4eac-b9ca-6bb576f5e469/output/indep/host1'
+Reading org.batfish.datamodel.Configuration 'r3' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/a3f41e3e-f530-4eac-b9ca-6bb576f5e469/output/indep/r3'
+Reading org.batfish.datamodel.Configuration 'r1' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/a3f41e3e-f530-4eac-b9ca-6bb576f5e469/output/indep/r1'
+Reading org.batfish.datamodel.Configuration 'r4' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/a3f41e3e-f530-4eac-b9ca-6bb576f5e469/output/indep/r4'
+Reading org.batfish.datamodel.Configuration 'r2' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/a3f41e3e-f530-4eac-b9ca-6bb576f5e469/output/indep/r2'
+Loaded configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=a3f41e3e-f530-4eac-b9ca-6bb576f5e469} off diskLoading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=a3f41e3e-f530-4eac-b9ca-6bb576f5e469}
+Loading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=a3f41e3e-f530-4eac-b9ca-6bb576f5e469}
+Loading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=a3f41e3e-f530-4eac-b9ca-6bb576f5e469}
+Loading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=a3f41e3e-f530-4eac-b9ca-6bb576f5e469}
+Loading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=a3f41e3e-f530-4eac-b9ca-6bb576f5e469}
+{
+  "class" : "org.batfish.datamodel.answers.InitInfoAnswerElement",
+  "parseStatus" : {
+    "configs/r1.cfg" : "PASSED",
+    "configs/r2.cfg" : "PASSED",
+    "configs/r3.cfg" : "PASSED",
+    "configs/r4.cfg" : "PASSED",
+    "hosts/host1.json" : "PASSED",
+    "hosts/host2.json" : "PASSED",
+    "iptables/host1.iptables" : "PASSED",
+    "iptables/host2.iptables" : "PASSED"
+  }
+}{"answerElements":[{"class":"org.batfish.datamodel.answers.InitInfoAnswerElement","parseStatus":{"configs/r1.cfg":"PASSED","configs/r2.cfg":"PASSED","configs/r3.cfg":"PASSED","configs/r4.cfg":"PASSED","hosts/host1.json":"PASSED","hosts/host2.json":"PASSED","iptables/host1.iptables":"PASSED","iptables/host2.iptables":"PASSED"}}],"status":"SUCCESS","summary":{"numFailed":0,"numPassed":0,"numResults":0}}

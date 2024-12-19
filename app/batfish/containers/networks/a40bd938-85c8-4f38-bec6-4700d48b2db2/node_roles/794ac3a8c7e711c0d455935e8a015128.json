@@ -1,0 +1,1 @@
+{"defaultDimension":"auto0","roleMappings":[{"regex":"(\\p{Alpha}+)\\p{Digit}+(\\p{Alpha}+)\\p{Digit}+","roleDimensionGroups":{"auto0":[2],"auto1":[1]}}],"type":"AUTO"}

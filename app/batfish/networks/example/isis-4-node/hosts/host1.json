@@ -1,0 +1,11 @@
+{
+    "hostname": "host1",
+    "iptablesFile": "iptables/host1.iptables",
+    "hostInterfaces": {
+        "eth0": {
+            "name": "eth0",
+            "prefix": "10.1.100.2/24",
+            "gateway": "10.1.100.1"
+        }
+    }
+}

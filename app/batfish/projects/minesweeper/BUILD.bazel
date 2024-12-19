@@ -1,0 +1,15 @@
+load("@rules_java//java:defs.bzl", "java_library")
+
+package(default_visibility = ["//visibility:public"])
+
+###################################################################
+### a virtual dependency aggregating and exporting the
+### submodules in this directory so that downstream code does not
+### need to change when the internal module structure changes.
+###################################################################
+java_library(
+    name = "minesweeper",
+    exports = [
+        "//projects/minesweeper/src/main/java/org/batfish/minesweeper",
+    ],
+)

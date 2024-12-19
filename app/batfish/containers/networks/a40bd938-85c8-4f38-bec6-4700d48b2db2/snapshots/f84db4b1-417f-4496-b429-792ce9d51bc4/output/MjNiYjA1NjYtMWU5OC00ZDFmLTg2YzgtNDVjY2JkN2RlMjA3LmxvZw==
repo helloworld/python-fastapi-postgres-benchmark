@@ -1,0 +1,60 @@
+
+*** READING DEVICE CONFIGURATION FILES ***
+Reading: "configs/r2.cfg"
+Reading: "configs/r3.cfg"
+Reading: "configs/r1.cfg"
+Reading: "configs/r4.cfg"
+Snapshot f84db4b1-417f-4496-b429-792ce9d51bc4 in network a40bd938-85c8-4f38-bec6-4700d48b2db2 has total number of network configs:4	Parsing...OK
+	Post-processing...OK
+	Parsing...OK
+	Post-processing...OK
+	Parsing...OK
+	Post-processing...OK
+	Parsing...OK
+	Post-processing...OK
+
+*** SERIALIZING VENDOR CONFIGURATION STRUCTURES ***
+Time taken for this task: 0.005 seconds
+
+*** READING AWS CONFIGS ***
+
+*** DESERIALIZING VENDOR CONFIGURATION STRUCTURES ***
+Reading org.batfish.vendor.VendorConfiguration 'r3' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/f84db4b1-417f-4496-b429-792ce9d51bc4/output/vendor/r3'
+Reading org.batfish.vendor.VendorConfiguration 'r1' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/f84db4b1-417f-4496-b429-792ce9d51bc4/output/vendor/r1'
+Reading org.batfish.vendor.VendorConfiguration 'r4' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/f84db4b1-417f-4496-b429-792ce9d51bc4/output/vendor/r4'
+Reading org.batfish.vendor.VendorConfiguration 'r2' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/f84db4b1-417f-4496-b429-792ce9d51bc4/output/vendor/r2'
+Time taken for this task: 0.002 seconds
+
+*** CONVERTING VENDOR CONFIGURATIONS TO INDEPENDENT FORMAT ***
+Processing: "r2" ...OK
+Job terminated successfully with result: [r2] after elapsed time: 00:00:00.00 - 1/4 (25.0%) complete
+Processing: "r4" ...OK
+Job terminated successfully with result: [r4] after elapsed time: 00:00:00.00 - 2/4 (50.0%) complete
+Processing: "r3" ...OK
+Job terminated successfully with result: [r3] after elapsed time: 00:00:00.00 - 3/4 (75.0%) complete
+Processing: "r1" ...OK
+Job terminated successfully with result: [r1] after elapsed time: 00:00:00.00 - 4/4 (100.0%) complete
+Time taken for this task: 0.005 seconds
+
+*** SERIALIZING 4 VENDOR-INDEPENDENT CONFIGURATION STRUCTURES FOR SNAPSHOT F84DB4B1-417F-4496-B429-792CE9D51BC4***
+Loading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=f84db4b1-417f-4496-b429-792ce9d51bc4}
+Loading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=f84db4b1-417f-4496-b429-792ce9d51bc4}, cache miss
+*** DESERIALIZING VENDOR-INDEPENDENT CONFIGURATION STRUCTURES ***
+Reading org.batfish.datamodel.Configuration 'r3' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/f84db4b1-417f-4496-b429-792ce9d51bc4/output/indep/r3'
+Reading org.batfish.datamodel.Configuration 'r1' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/f84db4b1-417f-4496-b429-792ce9d51bc4/output/indep/r1'
+Reading org.batfish.datamodel.Configuration 'r4' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/f84db4b1-417f-4496-b429-792ce9d51bc4/output/indep/r4'
+Reading org.batfish.datamodel.Configuration 'r2' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/f84db4b1-417f-4496-b429-792ce9d51bc4/output/indep/r2'
+Loaded configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=f84db4b1-417f-4496-b429-792ce9d51bc4} off diskLoading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=f84db4b1-417f-4496-b429-792ce9d51bc4}
+Loading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=f84db4b1-417f-4496-b429-792ce9d51bc4}
+Loading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=f84db4b1-417f-4496-b429-792ce9d51bc4}
+Loading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=f84db4b1-417f-4496-b429-792ce9d51bc4}
+Loading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=f84db4b1-417f-4496-b429-792ce9d51bc4}
+{
+  "class" : "org.batfish.datamodel.answers.InitInfoAnswerElement",
+  "parseStatus" : {
+    "configs/r1.cfg" : "PASSED",
+    "configs/r2.cfg" : "PASSED",
+    "configs/r3.cfg" : "PASSED",
+    "configs/r4.cfg" : "PASSED"
+  }
+}{"answerElements":[{"class":"org.batfish.datamodel.answers.InitInfoAnswerElement","parseStatus":{"configs/r1.cfg":"PASSED","configs/r2.cfg":"PASSED","configs/r3.cfg":"PASSED","configs/r4.cfg":"PASSED"}}],"status":"SUCCESS","summary":{"numFailed":0,"numPassed":0,"numResults":0}}

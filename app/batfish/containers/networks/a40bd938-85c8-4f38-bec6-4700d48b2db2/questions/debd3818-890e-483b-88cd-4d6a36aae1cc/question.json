@@ -1,0 +1,92 @@
+{
+  "class": "org.batfish.question.routes.RoutesQuestion",
+  "differential": false,
+  "instance": {
+    "description": "Returns routing tables.",
+    "instanceName": "__routes_e93a802a-6be4-4e87-8825-7c5b7453fcce",
+    "longDescription": "Shows routes for specified RIB, VRF, and node(s).",
+    "orderedVariableNames": [
+      "nodes",
+      "network",
+      "prefixMatchType",
+      "protocols",
+      "vrfs",
+      "rib"
+    ],
+    "tags": [
+      "dataplane",
+      "routing"
+    ],
+    "variables": {
+      "network": {
+        "description": "Return routes for networks matching this prefix.",
+        "displayName": "Network",
+        "optional": true,
+        "type": "prefix"
+      },
+      "nodes": {
+        "description": "Return routes on nodes matching this specifier.",
+        "displayName": "Nodes",
+        "optional": true,
+        "type": "nodeSpec",
+        "value": "r1"
+      },
+      "prefixMatchType": {
+        "description": "Use this prefix matching criterion: EXACT, LONGEST_PREFIX_MATCH, LONGER_PREFIXES, SHORTER_PREFIXES.",
+        "displayName": "Prefix match type",
+        "optional": true,
+        "type": "string",
+        "value": "EXACT",
+        "values": [
+          {
+            "name": "EXACT"
+          },
+          {
+            "name": "LONGEST_PREFIX_MATCH"
+          },
+          {
+            "name": "LONGER_PREFIXES"
+          },
+          {
+            "name": "SHORTER_PREFIXES"
+          }
+        ]
+      },
+      "protocols": {
+        "description": "Return routes for protocols matching this specifier.",
+        "displayName": "Protocols",
+        "optional": true,
+        "type": "routingProtocolSpec"
+      },
+      "rib": {
+        "description": "Only return routes from a given protocol RIB.",
+        "displayName": "RIB",
+        "optional": true,
+        "type": "string",
+        "values": [
+          {
+            "name": "main"
+          },
+          {
+            "name": "bgp"
+          },
+          {
+            "name": "evpn"
+          }
+        ]
+      },
+      "vrfs": {
+        "description": "Return routes on VRFs matching this name or regex.",
+        "displayName": "VRFs",
+        "optional": true,
+        "type": "vrf"
+      }
+    }
+  },
+  "network": "${network}",
+  "nodes": "${nodes}",
+  "prefixMatchType": "${prefixMatchType}",
+  "protocols": "${protocols}",
+  "rib": "${rib}",
+  "vrfs": "${vrfs}"
+}

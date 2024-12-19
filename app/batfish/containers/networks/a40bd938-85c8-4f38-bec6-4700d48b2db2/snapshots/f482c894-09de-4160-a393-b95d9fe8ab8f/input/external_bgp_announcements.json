@@ -1,0 +1,21 @@
+{
+  "Announcements": [
+    {
+      "type": "ebgp_sent",
+      "network": "192.168.100.0/24",
+      "nextHopIp": "10.2.3.3",
+      "srcIp": "10.2.3.3",
+      "dstNode": "r2",
+      "dstIp": "10.2.3.2",
+      "srcProtocol": "BGP",
+      "originType": "egp",
+      "localPreference": 0,
+      "med": 0,
+      "originatorIp": "0.0.0.0",
+      "asPath": [[65002]],
+      "communities": [],
+      "dstVrf": "default",
+      "clusterList": []
+    }
+  ]
+}

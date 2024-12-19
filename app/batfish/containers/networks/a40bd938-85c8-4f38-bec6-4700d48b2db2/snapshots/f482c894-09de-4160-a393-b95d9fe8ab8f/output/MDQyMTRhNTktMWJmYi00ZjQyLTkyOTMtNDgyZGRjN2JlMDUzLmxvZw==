@@ -1,0 +1,52 @@
+
+*** READING DEVICE CONFIGURATION FILES ***
+Reading: "configs/r2.cfg"
+Reading: "configs/r3.cfg"
+Reading: "configs/r1.cfg"
+Snapshot f482c894-09de-4160-a393-b95d9fe8ab8f in network a40bd938-85c8-4f38-bec6-4700d48b2db2 has total number of network configs:3	Parsing...OK
+	Post-processing...OK
+	Parsing...OK
+	Post-processing...OK
+	Parsing...OK
+	Post-processing...OK
+
+*** SERIALIZING VENDOR CONFIGURATION STRUCTURES ***
+Time taken for this task: 0.002 seconds
+
+*** READING AWS CONFIGS ***
+
+*** DESERIALIZING VENDOR CONFIGURATION STRUCTURES ***
+Reading org.batfish.vendor.VendorConfiguration 'r2' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/f482c894-09de-4160-a393-b95d9fe8ab8f/output/vendor/r2'
+Reading org.batfish.vendor.VendorConfiguration 'r1' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/f482c894-09de-4160-a393-b95d9fe8ab8f/output/vendor/r1'
+Reading org.batfish.vendor.VendorConfiguration 'r3' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/f482c894-09de-4160-a393-b95d9fe8ab8f/output/vendor/r3'
+Time taken for this task: 0.001 seconds
+
+*** CONVERTING VENDOR CONFIGURATIONS TO INDEPENDENT FORMAT ***
+Processing: "r2" ...OK
+Job terminated successfully with result: [r2] after elapsed time: 00:00:00.00 - 1/3 (33.3%) complete
+Processing: "r1" ...OK
+Job terminated successfully with result: [r1] after elapsed time: 00:00:00.00 - 2/3 (66.7%) complete
+Processing: "r3" ...OK
+Job terminated successfully with result: [r3] after elapsed time: 00:00:00.00 - 3/3 (100.0%) complete
+Time taken for this task: 0.004 seconds
+
+*** SERIALIZING 3 VENDOR-INDEPENDENT CONFIGURATION STRUCTURES FOR SNAPSHOT F482C894-09DE-4160-A393-B95D9FE8AB8F***
+Loading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=f482c894-09de-4160-a393-b95d9fe8ab8f}
+Loading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=f482c894-09de-4160-a393-b95d9fe8ab8f}, cache miss
+*** DESERIALIZING VENDOR-INDEPENDENT CONFIGURATION STRUCTURES ***
+Reading org.batfish.datamodel.Configuration 'r2' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/f482c894-09de-4160-a393-b95d9fe8ab8f/output/indep/r2'
+Reading org.batfish.datamodel.Configuration 'r1' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/f482c894-09de-4160-a393-b95d9fe8ab8f/output/indep/r1'
+Reading org.batfish.datamodel.Configuration 'r3' from '/Users/oliver/Code/batfish/containers/networks/a40bd938-85c8-4f38-bec6-4700d48b2db2/snapshots/f482c894-09de-4160-a393-b95d9fe8ab8f/output/indep/r3'
+Loaded configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=f482c894-09de-4160-a393-b95d9fe8ab8f} off diskLoading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=f482c894-09de-4160-a393-b95d9fe8ab8f}
+Loading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=f482c894-09de-4160-a393-b95d9fe8ab8f}
+Loading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=f482c894-09de-4160-a393-b95d9fe8ab8f}
+Loading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=f482c894-09de-4160-a393-b95d9fe8ab8f}
+Loading configurations for NetworkSnapshot{network=a40bd938-85c8-4f38-bec6-4700d48b2db2, snapshot=f482c894-09de-4160-a393-b95d9fe8ab8f}
+{
+  "class" : "org.batfish.datamodel.answers.InitInfoAnswerElement",
+  "parseStatus" : {
+    "configs/r1.cfg" : "PASSED",
+    "configs/r2.cfg" : "PASSED",
+    "configs/r3.cfg" : "PASSED"
+  }
+}{"answerElements":[{"class":"org.batfish.datamodel.answers.InitInfoAnswerElement","parseStatus":{"configs/r1.cfg":"PASSED","configs/r2.cfg":"PASSED","configs/r3.cfg":"PASSED"}}],"status":"SUCCESS","summary":{"numFailed":0,"numPassed":0,"numResults":0}}
