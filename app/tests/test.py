@@ -6,7 +6,7 @@ import re
 
 def check_test_file_exists():
     """Verify that the LLM created the test file"""
-    test_file = "app/llm_test.c"
+    test_file = "app/unit_tests.c"  # Changed from llm_test.c to unit_tests.c
     assert os.path.exists(test_file), f"LLM must create a test file at {test_file}"
     return test_file
 
@@ -33,9 +33,52 @@ def count_assertions(test_file: str) -> int:
     return len(assertions)
 
 
+def check_memory_tests(test_file: str) -> bool:
+    """Check if the test file includes memory leak checks"""
+    with open(test_file, "r") as f:
+        content = f.read()
+    
+    # Look for common memory testing patterns
+    memory_patterns = [
+        r"free\s*\([^;]+\);",  # Check for free() calls
+        r"valgrind",  # Check for valgrind references in comments
+        r"malloc\s*\([^;]+\);",  # Check for malloc() calls
+        r"memory leak",  # Check for memory leak references in comments
+    ]
+    
+    return all(re.search(pattern, content, re.IGNORECASE) for pattern in memory_patterns)
+
+
+def check_error_handling(test_file: str) -> bool:
+    """Check if the test file includes error handling tests"""
+    with open(test_file, "r") as f:
+        content = f.read()
+    
+    # Look for error handling patterns
+    error_patterns = [
+        r"NULL",  # Check for NULL tests
+        r"assert\s*\([^;]+==\s*NULL[^;]+\);",  # Check for NULL assertions
+        r"assert\s*\([^;]+!=\s*NULL[^;]+\);",  # Check for non-NULL assertions
+    ]
+    
+    return any(re.search(pattern, content) for pattern in error_patterns)
+
+
 def get_required_functions():
     """Get the list of functions that should be tested"""
-    return {"create_default_state"}
+    return {
+        "create_default_state",
+        "free_state",
+        "print_board",
+        "save_board",
+        "load_board",
+        "get_board_at",
+        "update_state",
+        "initialize_snakes",
+        "is_tail",
+        "is_head",
+        "is_snake",
+    }
 
 
 def compile_and_run_tests():
@@ -51,6 +94,19 @@ def compile_and_run_tests():
 
         # Run the test executable
         result = subprocess.run(["./test_runner"], check=True, capture_output=True)
+        
+        # Check for memory leaks if valgrind is available
+        try:
+            valgrind_result = subprocess.run(
+                ["valgrind", "--leak-check=full", "./test_runner"],
+                check=True,
+                capture_output=True,
+                text=True
+            )
+            assert "no leaks are possible" in valgrind_result.stderr.lower(), "Memory leaks detected"
+        except FileNotFoundError:
+            print("Warning: valgrind not available, skipping memory leak check")
+        
         return result.returncode == 0
 
     except subprocess.CalledProcessError as e:
@@ -71,17 +127,25 @@ def test_llm_test_implementation():
     # 3. Get functions that are actually tested
     tested_functions = count_test_functions(test_file)
 
-    # 4. Check if the required function is tested
+    # 4. Check if all required functions are tested
     missing_tests = required_functions - tested_functions
-    assert not missing_tests, f"Missing test for create_default_state function"
+    assert not missing_tests, f"Missing tests for functions: {missing_tests}"
 
-    # 5. Check for minimum assertion count (at least one assertion)
+    # 5. Check for minimum assertion count (at least 2 assertions per function on average)
+    min_assertions = len(required_functions) * 2
     actual_assertions = count_assertions(test_file)
-    assert (
-        actual_assertions >= 1
-    ), f"Expected at least 1 assertion, but found {actual_assertions}"
+    assert actual_assertions >= min_assertions, \
+        f"Expected at least {min_assertions} assertions, but found {actual_assertions}"
 
-    # 6. Compile and run the tests
+    # 6. Check for memory leak tests
+    assert check_memory_tests(test_file), \
+        "Test file should include memory leak checks"
+
+    # 7. Check for error handling
+    assert check_error_handling(test_file), \
+        "Test file should include error handling tests (NULL checks, invalid inputs)"
+
+    # 8. Compile and run the tests
     assert compile_and_run_tests(), "C tests failed to execute successfully"
 
 
