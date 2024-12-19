@@ -77,4 +77,3 @@ This will:
 3. Verify memory leak testing
 4. Check error handling
 5. Compile and run the tests
-6. Run memory leak detection (when valgrind is available)
