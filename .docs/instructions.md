@@ -1,15 +1,15 @@
-# Objective:
-Your task is to help identify the key files needed to bypass Batfish's modeling phase and directly provide inputs to its verification engine. Let's focus on the reachability query as a starting point to understand the interface between these phases.
-
-Specific Questions:
-1. What are the essential data structures and fields needed to interface directly with the verification engine?
-2. Which source files should I examine to understand and modify this interface?
-
 # Context:
 Batfish's architecture has two main phases:
 1. Modeling Phase (Top Half): Ingests router configs and simulates router behavior
 2. Verification Phase (Bottom Half): Takes modeled inputs and performs formal verification
 3. The code that you are tasked to explore and is relevant to answer the task is located at app/batfish
+
+# Objective:
+A user would like to remove batfish's top half and directly provide inputs to its verification engine. The user is interested in focusing on the reachability query as a starting point to understand the interface between these phases. Your job as an agent is to help the user make a list of files which contain relevant code to accomplish the specified task so that they can explore the relevant code quickly.
+
+Specific Questions:
+1. What are the essential data structures and fields needed to interface directly with the verification engine?
+2. Which source files should I examine to understand and modify this interface?
 
 # Instructions: 
 1. carefully consider the objective you have been given and read through relevant files in app/batfish.
